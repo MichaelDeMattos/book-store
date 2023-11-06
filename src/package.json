@@ -1,0 +1,26 @@
+{
+  "name": "book-store",
+  "version": "1.0.0",
+  "description": "Getting Started with Express.js to Build a JSON API in Node",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichaelDeMattos/book-store.git"
+  },
+  "author": "Michael Ortiz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MichaelDeMattos/book-store/issues"
+  },
+  "homepage": "https://github.com/MichaelDeMattos/book-store#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "winston": "^3.11.0"
+  }
+}

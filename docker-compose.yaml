@@ -1,0 +1,67 @@
+version: "3.1"
+
+services:
+  app_instance_a:
+    container_name: app_instance_a
+    volumes:
+      - ./src/logs/error.log:/home/foo/book-store/src/logs/error.log
+      - ./src/logs/combined.log:/home/foo/book-store/src/logs/combined.log
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '127.0.0.1:3000:3000'
+    networks:
+      - network_default
+    environment:
+      INSTANCE_HOST: app_instance_a
+      INSTANCE_PORT: 3000
+    deploy:
+        resources:
+          limits:
+            cpus: '0.25'
+            memory: '1.0GB'
+
+  app_instance_b:
+    container_name: app_instance_b
+    volumes:
+      - ./src/logs/error.log:/home/foo/book-store/src/logs/error.log
+      - ./src/logs/combined.log:/home/foo/book-store/src/logs/combined.log
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '127.0.0.1:3001:3001'
+    networks:
+      - network_default
+    environment:
+      INSTANCE_HOST: app_instance_b
+      INSTANCE_PORT: 3001
+    deploy:
+        resources:
+          limits:
+            cpus: '0.25'
+            memory: '1.0GB'
+
+  nginx_server:
+      container_name: nginx_server
+      restart: always
+      image: nginx
+      volumes:
+        - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      ports:
+        - target: 8080
+          published: 8080
+          protocol: tcp
+          mode: host
+      networks:
+        - network_default
+      deploy:
+        resources:
+          limits:
+            cpus: '0.25'
+            memory: '1.0GB'
+
+networks:
+  network_default:
+    driver: bridge
