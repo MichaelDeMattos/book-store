@@ -16,6 +16,7 @@ services:
     environment:
       INSTANCE_HOST: app_instance_a
       INSTANCE_PORT: 3000
+      INSTANCE: "main"
     env_file:
       - .env
     deploy:
@@ -39,6 +40,7 @@ services:
     environment:
       INSTANCE_HOST: app_instance_b
       INSTANCE_PORT: 3001
+      INSTANCE: "secondary"
     env_file:
       - .env
     deploy:
@@ -65,6 +67,33 @@ services:
           limits:
             cpus: '0.25'
             memory: '1.0GB'
+
+  postgres_db:
+    container_name: postgres_db
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: ${DATABASE_DB}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - ./postgresql.conf:/docker-entrypoint-initdb.d/postgresql.conf
+    command: postgres -c config_file=/docker-entrypoint-initdb.d/postgresql.conf
+    ports:
+      - "127.0.0.1:5432:5432"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: '1GB'
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready --dbname=${DATABASE_DB} --username=${DATABASE_USER}"]
+        interval: 5s
+        timeout: 5s
+        retries: 20
+        start_period: 10s
+    networks:
+      - network_default
 
 networks:
   network_default:

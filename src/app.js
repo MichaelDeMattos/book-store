@@ -1,7 +1,8 @@
 const express = require("express");
 const logger = require('./logger');
-const books_api = require("./api/books");
+const books_api = require("./api/BooksApi");
 const bodyParser = require('body-parser');
+const sequelize = require('./config');
 
 // Config Express App
 const app = express();
@@ -23,6 +24,16 @@ app.use(books_api);
 app.use((req, res) => {
     res.status(404).send('Not found!!!')
 });
+
+// Sync database
+if (process.env.INSTANCE == 'main') {
+    sequelize.sync()
+    .then(() => {
+        console.log('Database synchronized');
+    }).catch((err) => {
+        console.error('Error syncing the database:', err);
+});
+}
 
 // Export default app
 app.listen(instance_port, instance_host, () => {
