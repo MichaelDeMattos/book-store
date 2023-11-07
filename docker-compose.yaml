@@ -16,6 +16,8 @@ services:
     environment:
       INSTANCE_HOST: app_instance_a
       INSTANCE_PORT: 3000
+    env_file:
+      - .env
     deploy:
         resources:
           limits:
@@ -37,6 +39,8 @@ services:
     environment:
       INSTANCE_HOST: app_instance_b
       INSTANCE_PORT: 3001
+    env_file:
+      - .env
     deploy:
         resources:
           limits:

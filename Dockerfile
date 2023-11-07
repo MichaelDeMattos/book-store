@@ -1,7 +1,7 @@
 FROM node:17-alpine as builder
 
 # Install base dependences
-RUN apk update && apk add bash gcc shadow
+RUN apk update && apk add bash gcc shadow python3
 
 # Create new user
 RUN useradd --create-home foo
@@ -12,6 +12,6 @@ COPY ./src /home/foo/book-store/src
 
 # Run main application
 WORKDIR /home/foo/book-store/src
-RUN npm install -y
+RUN npm install -y && npm install -g pm2@latest
 ENTRYPOINT ["/bin/bash", "-c"]
-CMD ["node app.js"]
+CMD ["python3 run.py"]
